@@ -36,46 +36,48 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: Colors.grey.shade200,
           drawer: const CustomDrawer(),
           body: StreamBuilder<List<Task>>(
-              stream: FirebaseApi.readTasks(),
-              builder: (context, snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.waiting:
-                    return const Center(child: CircularProgressIndicator());
-                  default:
-                    if (snapshot.hasError) {
-                      return const Center(
-                          child: Text('Something Went Wrong Try later'));
-                    } else {
-                      final tasks = snapshot.data;
+            stream: FirebaseApi.readTasks(),
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                  return const Center(child: CircularProgressIndicator());
+                default:
+                  if (!snapshot.hasError) {
+                    print("error: ${snapshot.connectionState}");
+                    return const Center(
+                        child: Text('Something Went Wrong Try later'));
+                  } else {
+                    List<Task>? tasks = snapshot.data;
 
-                      final provider = Provider.of<TasksProvider>(context);
-                      provider.setTask(tasks!);
+                    final provider = Provider.of<TasksProvider>(context);
+                    provider.setTask(tasks!);
 
-                      return NestedScrollView(
-                        controller: _bloc.scrollController,
-                        headerSliverBuilder:
-                            (BuildContext context, bool innerBoxIsScrolled) {
-                          return [
-                            homeScreenAppBar(
-                              context,
-                              setState,
-                              innerBoxIsScrolled,
-                              _bloc.tabController,
-                            ),
-                          ];
-                        },
-                        body: TabBarView(
-                          controller: _bloc.tabController,
-                          children: const [
-                            DailyTODOScreen(),
-                            WeeklyTODOScreen(),
-                            MonthlyTODOScreen(),
-                          ],
-                        ),
-                      );
-                    }
-                }
-              }),
+                    return NestedScrollView(
+                      controller: _bloc.scrollController,
+                      headerSliverBuilder:
+                          (BuildContext context, bool innerBoxIsScrolled) {
+                        return [
+                          homeScreenAppBar(
+                            context,
+                            setState,
+                            innerBoxIsScrolled,
+                            _bloc.tabController,
+                          ),
+                        ];
+                      },
+                      body: TabBarView(
+                        controller: _bloc.tabController,
+                        children: const [
+                          DailyTODOScreen(),
+                          WeeklyTODOScreen(),
+                          MonthlyTODOScreen(),
+                        ],
+                      ),
+                    );
+                  }
+              }
+            },
+          ),
         ),
       ),
     );
