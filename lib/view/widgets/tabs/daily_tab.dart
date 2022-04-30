@@ -20,7 +20,7 @@ class _DailyTODOScreenState extends State<DailyTODOScreen> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<TasksProvider>(context);
-    List<Task> tasks = provider.tasks;
+    List<Task> tasks = provider.tasksCompleted;
 
     tasks = tasks
         .where(

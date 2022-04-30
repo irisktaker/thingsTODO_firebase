@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:things_to_do_firebase/api/firebase_api.dart';
+import 'package:things_to_do_firebase/models/task.dart';
+import 'package:things_to_do_firebase/provider/tasks_provider.dart';
 
 import '/view/widgets/tabs/daily_tab.dart';
 import '/view/widgets/tabs/weekly_tab.dart';
@@ -31,28 +35,47 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Scaffold(
           backgroundColor: Colors.grey.shade200,
           drawer: const CustomDrawer(),
-          body: NestedScrollView(
-            controller: _bloc.scrollController,
-            headerSliverBuilder:
-                (BuildContext context, bool innerBoxIsScrolled) {
-              return [
-                homeScreenAppBar(
-                  context,
-                  setState,
-                  innerBoxIsScrolled,
-                  _bloc.tabController,
-                ),
-              ];
-            },
-            body: TabBarView(
-              controller: _bloc.tabController,
-              children: const [
-                DailyTODOScreen(),
-                WeeklyTODOScreen(),
-                MonthlyTODOScreen(),
-              ],
-            ),
-          ),
+          body: StreamBuilder<List<Task>>(
+              stream: FirebaseApi.readTasks(),
+              builder: (context, snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.waiting:
+                    return const Center(child: CircularProgressIndicator());
+                  default:
+                    if (snapshot.hasError) {
+                      return const Center(
+                          child: Text('Something Went Wrong Try later'));
+                    } else {
+                      final tasks = snapshot.data;
+
+                      final provider = Provider.of<TasksProvider>(context);
+                      provider.setTask(tasks!);
+
+                      return NestedScrollView(
+                        controller: _bloc.scrollController,
+                        headerSliverBuilder:
+                            (BuildContext context, bool innerBoxIsScrolled) {
+                          return [
+                            homeScreenAppBar(
+                              context,
+                              setState,
+                              innerBoxIsScrolled,
+                              _bloc.tabController,
+                            ),
+                          ];
+                        },
+                        body: TabBarView(
+                          controller: _bloc.tabController,
+                          children: const [
+                            DailyTODOScreen(),
+                            WeeklyTODOScreen(),
+                            MonthlyTODOScreen(),
+                          ],
+                        ),
+                      );
+                    }
+                }
+              }),
         ),
       ),
     );
