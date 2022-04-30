@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "795612186919",
+    "project_id": "thingstodo-830e8",
+    "storage_bucket": "thingstodo-830e8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:795612186919:android:7362b5ee9bd51afd084102",
+        "android_client_info": {
+          "package_name": "com.example.things_to_do_firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "795612186919-rc7n0u7jh06ne36ls0l1vltor6flm10n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgN3uiFeOjpfJXvevmxcHdrbJJfyK0Rso"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "795612186919-rc7n0u7jh06ne36ls0l1vltor6flm10n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
