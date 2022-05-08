@@ -2,12 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:things_to_do_firebase/models/task.dart';
 import 'package:things_to_do_firebase/provider/tasks_provider.dart';
 import 'package:things_to_do_firebase/utils/colors.dart';
 
 class DoneTasksSection extends StatelessWidget {
-  const DoneTasksSection({Key? key}) : super(key: key);
+  DoneTasksSection(this.task, {Key? key}) : super(key: key);
 
+  List<Task> task;
   @override
   Widget build(BuildContext context) {
     // TODO:
@@ -42,9 +44,8 @@ class DoneTasksSection extends StatelessWidget {
             ),
           ),
           Text(
-            "Tomorrow 3:55 PM ",
             // TODO:
-            // ${tasks[0].createdAt.day}",
+            task.length.toString(),
             style: TextStyle(
               fontSize: 16,
               color: ThemeColors.greyColor.withOpacity(0.6),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'tasks_bloc.dart';
+import 'new_tasks_bloc.dart';
 import '/utils/colors.dart';
 import '/utils/colors_parser.dart';
 import '/view/widgets/shared/custom_search_widget.dart';
@@ -17,12 +17,7 @@ class NewTaskScreen extends StatefulWidget {
 }
 
 class _NewTaskScreenState extends State<NewTaskScreen> {
-  final TasksBloc _bloc = TasksBloc();
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  final NewTasksBloc _bloc = NewTasksBloc();
 
   @override
   Widget build(BuildContext context) {

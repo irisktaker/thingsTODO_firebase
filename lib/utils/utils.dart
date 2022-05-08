@@ -20,15 +20,16 @@ class Utils {
     return date.toUtc();
   }
 
-  static StreamTransformer transformer<T>(
-          T Function(Map<String, dynamic> json) fromJson) =>
-      StreamTransformer<QuerySnapshot<Map<String, dynamic>>,
-          List<T>>.fromHandlers(
-        handleData: (QuerySnapshot data, EventSink<List<T>> sink) {
-          final dynamic snaps = data.docs.map((doc) => doc.data()).toList();
-          final objects = snaps.map((json) => fromJson(json)).toList();
+  static StreamTransformer<QuerySnapshot<Map<String, dynamic>>, List<T>>
+      transformer<T>(T Function(Map<String, dynamic> json) fromJson) =>
+          StreamTransformer<QuerySnapshot<Map<String, dynamic>>,
+              List<T>>.fromHandlers(
+            handleData: (QuerySnapshot<Map<String, dynamic>> data,
+                EventSink<List<T>> sink) {
+              final snaps = data.docs.map((doc) => doc.data()).toList();
+              final objects = snaps.map((json) => fromJson(json)).toList();
 
-          sink.add(objects);
-        },
-      );
+              sink.add(objects);
+            },
+          );
 }

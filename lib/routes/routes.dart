@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '/view/screens/home/home_screen.dart';
 import '/view/screens/login/login_screen.dart';
 import '/view/screens/register/register_screen.dart';
-import '/view/screens/tasks_screens/add_new_task.dart';
+import '../view/screens/tasks_screens/new_task_screen.dart';
 
 Map<String, WidgetBuilder> routes = {
   '/': (context) => const LoginScreen(),

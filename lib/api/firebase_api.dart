@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:things_to_do_firebase/utils/utils.dart';
 
+import '/utils/utils.dart';
 import '/models/task.dart';
 
 class FirebaseApi {
   //.. Create a task
   //..
   static Future<DocumentReference<Map<String, dynamic>>> createTask(
-      Task task) async {
+    Task task,
+  ) async {
     final docTask = FirebaseFirestore.instance.collection('tasks').doc();
     task.id = docTask.id;
     await docTask.set(task.toJson());
@@ -18,10 +19,13 @@ class FirebaseApi {
   //..
   static Stream<List<Task>> readTasks() => FirebaseFirestore.instance
       .collection('tasks')
-      .orderBy(TaskField.createdTime, descending: true)
+      .orderBy(
+        TaskField.createdTime,
+        descending: true,
+      )
       .snapshots()
       .transform(
-        Utils.transformer(Task.fromJson) as dynamic,
+        Utils.transformer(Task.fromJson),
       );
 
   //..Update a task

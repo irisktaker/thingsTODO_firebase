@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.things_to_do_firebase">
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
    <application
         android:label="things_to_do_firebase"
         android:name="${applicationName}"

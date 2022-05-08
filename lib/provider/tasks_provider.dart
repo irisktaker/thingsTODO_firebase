@@ -1,24 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:things_to_do_firebase/api/firebase_api.dart';
 
 import '../models/task.dart';
+import '/api/firebase_api.dart';
 
 class TasksProvider extends ChangeNotifier {
   List<Task> _tasks = [];
-  List<Task> get tasks => _tasks.where((task) => task.isDone == false).toList();
-  // isLater and isFavorite ??
-  List<Task> get tasksCompleted =>
-      _tasks.where((task) => task.isDone == true).toList();
 
-  void setTask(List<Task> tasks) {
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      _tasks = tasks;
-      notifyListeners();
-    });
-  }
-
-  void addTask(Task task) => FirebaseApi.createTask(task);
-  void removeTask(Task task) => FirebaseApi.deleteTodo(task);
+  get doneTask => _tasks.where((t) => t.isDone == false).toList();
+  get laterTask => _tasks.where((t) => t.isLater == false).toList();
+  get favoriteTask => _tasks.where((t) => t.isFavorite == false).toList();
+  get tasksCompleted => _tasks.where((t) => t.isDone == true).toList();
 
   bool toggleTaskIsDoneStatus(Task task) {
     task.isDone = !task.isDone;
@@ -38,8 +29,24 @@ class TasksProvider extends ChangeNotifier {
     return task.isLater;
   }
 
-  void updateTask(Task task, String title, String description, String color,
-      DateTime finalDate) {
+  void addTask(Task task) => FirebaseApi.createTask(task);
+
+  void removeTask(Task task) => FirebaseApi.deleteTodo(task);
+
+  void setTask(List<Task> tasks) {
+    _tasks = tasks;
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      notifyListeners();
+    });
+  }
+
+  void updateTask(
+    Task task,
+    String title,
+    String description,
+    String color,
+    DateTime finalDate,
+  ) {
     task.taskTitle = title;
     task.taskDesc = description;
     task.taskColor = color;

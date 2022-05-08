@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:things_to_do_firebase/api/firebase_api.dart';
-import 'package:things_to_do_firebase/models/task.dart';
-import 'package:things_to_do_firebase/provider/tasks_provider.dart';
 
+import '/models/task.dart';
+import '/api/firebase_api.dart';
+import '/provider/tasks_provider.dart';
 import '/view/widgets/tabs/daily_tab.dart';
 import '/view/widgets/tabs/weekly_tab.dart';
 import '/view/widgets/tabs/monthly_tab.dart';
@@ -16,7 +16,6 @@ HomeBloc _bloc = HomeBloc();
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
-
   static const screenRoute = 'home_screen';
 
   @override
@@ -32,52 +31,55 @@ class _HomeScreenState extends State<HomeScreen> {
         onTap: () {
           FocusScope.of(context).unfocus();
         },
-        child: Scaffold(
-          backgroundColor: Colors.grey.shade200,
-          drawer: const CustomDrawer(),
-          body: StreamBuilder<List<Task>>(
-            stream: FirebaseApi.readTasks(),
-            builder: (context, snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.waiting:
-                  return const Center(child: CircularProgressIndicator());
-                default:
-                  if (!snapshot.hasError) {
-                    print("error: ${snapshot.connectionState}");
-                    return const Center(
-                        child: Text('Something Went Wrong Try later'));
-                  } else {
-                    List<Task>? tasks = snapshot.data;
+        child: StreamBuilder<List<Task>>(
+          stream: FirebaseApi.readTasks(),
+          builder: (context, snapshot) {
+            //..
+            final tasks = snapshot.data;
+            final provider = Provider.of<TasksProvider>(context);
+            provider.setTask(tasks!);
 
-                    final provider = Provider.of<TasksProvider>(context);
-                    provider.setTask(tasks!);
+            //.
 
-                    return NestedScrollView(
-                      controller: _bloc.scrollController,
-                      headerSliverBuilder:
-                          (BuildContext context, bool innerBoxIsScrolled) {
-                        return [
-                          homeScreenAppBar(
-                            context,
-                            setState,
-                            innerBoxIsScrolled,
-                            _bloc.tabController,
-                          ),
-                        ];
-                      },
-                      body: TabBarView(
-                        controller: _bloc.tabController,
-                        children: const [
-                          DailyTODOScreen(),
-                          WeeklyTODOScreen(),
-                          MonthlyTODOScreen(),
-                        ],
+            if (snapshot.hasError) {
+              return const Center(
+                child: Text(
+                  'Something Went Wrong Try later',
+                ),
+              );
+            } else if (snapshot.hasData) {
+              return Scaffold(
+                backgroundColor: Colors.grey.shade200,
+                drawer: const CustomDrawer(),
+                body: NestedScrollView(
+                  controller: _bloc.scrollController,
+                  headerSliverBuilder:
+                      (BuildContext context, bool innerBoxIsScrolled) {
+                    return [
+                      homeScreenAppBar(
+                        context,
+                        setState,
+                        innerBoxIsScrolled,
+                        _bloc.tabController,
                       ),
-                    );
-                  }
-              }
-            },
-          ),
+                    ];
+                  },
+                  body: TabBarView(
+                    controller: _bloc.tabController,
+                    children: [
+                      DailyTODOScreen(tasks),
+                      const WeeklyTODOScreen(),
+                      const MonthlyTODOScreen(),
+                    ],
+                  ),
+                ),
+              );
+            } else {
+              return const Center(
+                child: CircularProgressIndicator.adaptive(),
+              );
+            }
+          },
         ),
       ),
     );

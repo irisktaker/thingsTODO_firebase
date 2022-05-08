@@ -10,9 +10,9 @@ import '/utils/colors_parser.dart';
 import '/view/widgets/shared/custom_circle.dart';
 
 class ListTasksSection extends StatefulWidget {
-  ListTasksSection({Key? key, required this.task}) : super(key: key);
+  ListTasksSection(this.tasks, {Key? key}) : super(key: key);
 
-  List<Task> task;
+  List<Task> tasks;
 
   @override
   State<ListTasksSection> createState() => _ListTasksSectionState();
@@ -21,9 +21,6 @@ class ListTasksSection extends StatefulWidget {
 class _ListTasksSectionState extends State<ListTasksSection> {
   @override
   Widget build(BuildContext context) {
-    // final provider = Provider.of<TasksProvider>(context);
-    // List<Task> tasks = provider.tasks;
-
     Size size = MediaQuery.of(context).size;
 
     return SizedBox(
@@ -32,12 +29,10 @@ class _ListTasksSectionState extends State<ListTasksSection> {
       child: ListView.builder(
         padding: const EdgeInsets.all(0),
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: widget.task.length,
+        itemCount: widget.tasks.length,
         itemBuilder: (context, index) {
-          var task = widget.task[index];
+          var task = widget.tasks[index];
           //..
-
-          print(task);
 
           return InkWell(
             onDoubleTap: () => onDoubleTap(task, index, context),
@@ -205,13 +200,13 @@ class _ListTasksSectionState extends State<ListTasksSection> {
   }
 
   void onDoubleTap(Task task, int index, BuildContext context) {
-    // if (tasks[index] == tasks[index]) {
-    // Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //         builder: (context) =>
-    //             TaskDetailsScreen(tasks, task, size)));
-    // }
+    if (widget.tasks[index] == widget.tasks[index]) {
+      // Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //         builder: (context) =>
+      //             TaskDetailsScreen(tasks, task, size)));
+    }
   }
 
   void onLongPress(Task task, context) {

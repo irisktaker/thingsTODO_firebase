@@ -1,19 +1,24 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
+import '/models/task.dart';
 import '/utils/colors.dart';
-import '/provider/tasks_provider.dart';
-import 'package:provider/provider.dart';
 import '/utils/singleton/singleton.dart';
 
-class CompletedTasksSection extends StatelessWidget {
-  const CompletedTasksSection(tasks, {Key? key}) : super(key: key);
+class CompletedTasksSection extends StatefulWidget {
+  CompletedTasksSection(this.tasks, {Key? key}) : super(key: key);
+
+  List<Task>? tasks;
 
   @override
-  Widget build(BuildContext context) {
-    final provider = Provider.of<TasksProvider>(context);
-    final tasks = provider.tasksCompleted;
+  State<CompletedTasksSection> createState() => _CompletedTasksSectionState();
+}
 
+class _CompletedTasksSectionState extends State<CompletedTasksSection> {
+  @override
+  Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(16),
@@ -71,15 +76,14 @@ class CompletedTasksSection extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      // "${tasksList.where((element) => element.isDone).toList().length}/",
-                      "$tasks",
+                      "${widget.tasks!.where((element) => element.isDone).toList().length}",
                       style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           color: ThemeColors.greenColor,
                           fontSize: 20),
                     ),
                     Text(
-                      tasks.length.toString(),
+                      widget.tasks!.length.toString(),
                       style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           color: ThemeColors.redColor,

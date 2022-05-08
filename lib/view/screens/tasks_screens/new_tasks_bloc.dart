@@ -4,7 +4,7 @@ import 'package:things_to_do_firebase/models/task.dart';
 import 'package:things_to_do_firebase/provider/tasks_provider.dart';
 import 'package:things_to_do_firebase/utils/colors_parser.dart';
 
-class TasksBloc {
+class NewTasksBloc {
   final taskTitleController = TextEditingController();
   final taskDescriptionController = TextEditingController();
   final taskCategoryController = TextEditingController();
@@ -71,8 +71,6 @@ class TasksBloc {
 
       final provider = Provider.of<TasksProvider>(context, listen: false);
       provider.addTask(task);
-
-      print(provider.tasks);
 
       Navigator.pop(context);
     } else {

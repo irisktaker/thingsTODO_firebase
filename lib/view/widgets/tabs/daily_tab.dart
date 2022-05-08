@@ -2,26 +2,23 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:things_to_do_firebase/models/task.dart';
-import 'package:things_to_do_firebase/provider/tasks_provider.dart';
 
-import 'package:things_to_do_firebase/view/widgets/sections/completed_tasks.dart';
-import 'package:things_to_do_firebase/view/widgets/sections/done_tasks.dart';
-import 'package:things_to_do_firebase/view/widgets/sections/list_tasks.dart';
+import '/models/task.dart';
+import '/api/firebase_api.dart';
+import '/provider/tasks_provider.dart';
+import '/view/widgets/sections/list_tasks.dart';
+import '/view/widgets/sections/done_tasks.dart';
+import '/view/widgets/sections/completed_tasks.dart';
 
-class DailyTODOScreen extends StatefulWidget {
-  const DailyTODOScreen({Key? key}) : super(key: key);
+class DailyTODOScreen extends StatelessWidget {
+  DailyTODOScreen(this.tasks, {Key? key}) : super(key: key);
 
-  @override
-  State<DailyTODOScreen> createState() => _DailyTODOScreenState();
-}
+  List<Task> tasks;
 
-class _DailyTODOScreenState extends State<DailyTODOScreen> {
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<TasksProvider>(context);
-    List<Task> tasks = provider.tasksCompleted;
-
+    // ...
+    // tasks.sort((a, b) => a.createdAt.compareTo(b.createdAt));
     tasks = tasks
         .where(
           (element) =>
@@ -38,11 +35,7 @@ class _DailyTODOScreenState extends State<DailyTODOScreen> {
         CompletedTasksSection(tasks),
 
         // --
-        (tasks.isNotEmpty)
-            ? ListTasksSection(
-                task: tasks,
-              )
-            : const DoneTasksSection(),
+        (tasks.isNotEmpty) ? ListTasksSection(tasks) : DoneTasksSection(tasks),
       ],
     );
   }

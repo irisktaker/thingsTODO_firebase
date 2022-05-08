@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:things_to_do_firebase/view/screens/tasks_screens/add_new_task.dart';
+import 'package:things_to_do_firebase/view/screens/tasks_screens/new_task_screen.dart';
 
 import '/utils/colors.dart';
 import 'custom_search_widget.dart';
